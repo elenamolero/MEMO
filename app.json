@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "TFG MEMO",
+    "slug": "tfg-memo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#007AFF",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "backgroundColor": "#007AFF"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
