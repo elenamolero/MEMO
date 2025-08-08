@@ -1,71 +1,71 @@
+
 # TFG MEMO - React Native Clean Architecture
 
-Una aplicación React Native con **Clean Architecture** y autenticación **Supabase**, construida con **Expo SDK 53** y **TypeScript**.
+A React Native application with **Clean Architecture** and **Supabase** authentication, built using **Expo SDK 53** and **TypeScript**.
 
-## 📁 Estructura de carpetas 
+## 📁 Folder Structure
 
-### **Domain (Centro de la arquitectura)**
-- **entities/**: Objetos de dominio sin dependencias externas
-- **specifications/**: Interfaces que definen contratos
+### **Domain (Core of the architecture)**
+- **entities/**: Domain objects without external dependencies
+- **specifications/**: Interfaces defining contracts
 
-### **Application (Casos de uso y estado)**
-- **DTO/**: Objetos para transferir datos entre capas
-- **stores/**: Estado global con MobX (lógica de presentación)
-- **useCases/**: Casos de uso del negocio (lógica pura)
-- **modules/**: Organización modular por funcionalidad
+### **Application (Use cases and state)**
+- **DTO/**: Data Transfer Objects between layers
+- **stores/**: Global state with MobX (presentation logic)
+- **useCases/**: Business use cases (pure logic)
+- **modules/**: Modular organization by functionality
 
-### **Infrastructure (Implementaciones técnicas)**
-- **implementations/**: Clases que implementan las interfaces del dominio
+### **Infrastructure (Technical implementations)**
+- **implementations/**: Classes implementing domain interfaces
 
 ### **Presentation (UI)**
-- **components/**: Componentes reutilizables de UI
-- **screens/**: Pantallas de la aplicación
-- **hooks/**: Custom hooks para acceso al estado
-- **navigation/**: Configuración de React Navigation
+- **components/**: Reusable UI components
+- **screens/**: Application screens
+- **hooks/**: Custom hooks for state access
+- **navigation/**: React Navigation configuration
 
+## 🚀 Technologies
 
-## 🚀 Tecnologías
+- **React Native** with **Expo SDK 53**
+- **TypeScript** for type safety
+- **Supabase** for authentication and backend
+- **MobX** for reactive state management
+- **React Navigation** for navigation
+- **Clean Architecture** with Dependency Injection
 
-- **React Native** con **Expo SDK 53**
-- **TypeScript** para type safety
-- **Supabase** para autenticación y backend
-- **MobX** para state management reactivo
-- **React Navigation** para navegación
-- **Clean Architecture** con Dependency Injection
+## ⚙️ Setup
 
-## ⚙️ Configuración
-
-### 1. Instalar dependencias
+### 1. Install dependencies
 ```bash
 npm install
 ```
 
-### 2. Configurar Supabase
-Crea un archivo `.env` en la raíz del proyecto:
+### 2. Configure Supabase
+Create a `.env` file in the project root:
 
 ```env
-EXPO_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
-EXPO_PUBLIC_SUPABASE_ANON_KEY=tu-clave-anonima
-EXPO_PUBLIC_API_URL=https://tu-proyecto.supabase.co
+EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+EXPO_PUBLIC_API_URL=https://your-project.supabase.co
 EXPO_PUBLIC_APP_NAME=TFG_MEMO
 EXPO_PUBLIC_MOCK_MODE=false
 ```
 
-### 3. Ejecutar la aplicación
+### 3. Run the application
 ```bash
 npm start
 ```
 
-## 🔧 Scripts disponibles
+## 🔧 Available Scripts
 
 ```bash
-npm start          # Iniciar servidor de desarrollo
-npm run android    # Ejecutar en Android
-npm run ios        # Ejecutar en iOS
-npm run web        # Ejecutar en web
+npm start          # Start development server
+npm run android    # Run on Android
+npm run ios        # Run on iOS
+npm run web        # Run on web
 ```
 
-## 📚 Recursos
+## 📚 Resources
 
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Supabase Documentation](https://supabase.com/docs)
@@ -74,4 +74,4 @@ npm run web        # Ejecutar en web
 
 ---
 
-**¡Happy coding!** 🚀
+**Happy coding!** 🚀

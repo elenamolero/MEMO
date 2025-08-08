@@ -6,15 +6,15 @@ import { AuthModule } from './modules/AuthModule';
 class CoreContainer {
   private static instance: CoreContainer;
   
-  // EAGER: Dependencias críticas
+  // EAGER: Critical dependencies
   private readonly _env: Env;
   private readonly _supabaseClient: ISupabaseClient;
   
-  // LAZY: Módulos por funcionalidad
+  // LAZY: Modules by functionality
   private _authModule: AuthModule | null = null;
 
   private constructor() {
-    // Eager initialization para dependencias críticas
+    // Eager initialization for critical dependencies
     this._env = {
       supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL || '',
       supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '',
@@ -23,7 +23,7 @@ class CoreContainer {
     
     this._supabaseClient = new SupabaseClient(this._env);
     
-    // Validar configuración crítica al inicio
+    // Validate critical configuration at startup
     this.validateCriticalConfig();
   }
 
@@ -40,7 +40,7 @@ class CoreContainer {
     return CoreContainer.instance;
   }
 
-  // Getters para dependencias críticas (eager)
+  // Getters for critical dependencies (eager)
   public get env(): Env {
     return this._env;
   }
@@ -49,7 +49,7 @@ class CoreContainer {
     return this._supabaseClient;
   }
 
-  // Getters para módulos (lazy)
+  // Getters for modules (lazy)
   public get authModule(): AuthModule {
     if (!this._authModule) {
       this._authModule = new AuthModule(this._supabaseClient);

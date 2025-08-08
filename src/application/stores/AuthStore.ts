@@ -41,7 +41,7 @@ export default class AuthStore {
       const result = await this.signUpUseCase.execute({ email, password, name });
       
       if (result.needsConfirmation) {
-        // User needs to confirm email
+  // User needs to confirm email
         return { success: true, needsConfirmation: true };
       }
       

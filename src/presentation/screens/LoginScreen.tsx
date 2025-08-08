@@ -35,7 +35,7 @@ const LoginScreen = observer(() => {
         }
       }
     } catch (error) {
-      // Error is handled by authStore
+  // Error is handled by authStore
     }
   };
 
