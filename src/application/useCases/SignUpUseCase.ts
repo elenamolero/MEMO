@@ -7,6 +7,20 @@ export default class SignUpUseCase implements UseCase<SignUpDTO, Promise<{ user:
   constructor(private readonly authRepository: IAuthRepository) {}
 
   public execute(dto: SignUpDTO) {
-    return this.authRepository.signUp(dto.email, dto.password, dto.name);
+    return this.authRepository.signUp(
+      dto.email,
+      dto.password,
+      dto.name,
+      dto.surname,
+      dto.role,
+      dto.supervisor_role,
+      dto.birth_date,
+      dto.illness_initiation_date,
+      dto.illness_name,
+      dto.GDS_number,
+      dto.sex,
+      dto.gender,
+      dto.academic_level
+    );
   }
 }

@@ -33,18 +33,17 @@ export default class AuthStore {
     }
   }
 
-  async signUp(email: string, password: string, name?: string) {
+  async signUp(signUpData: any) {
     this.setLoading(true);
     this.setError(null);
-    
     try {
-      const result = await this.signUpUseCase.execute({ email, password, name });
-      
+      // Import and use validation
+      const { validateUser } = await import('../../domain/entities/UserValidation');
+      validateUser(signUpData);
+      const result = await this.signUpUseCase.execute(signUpData);
       if (result.needsConfirmation) {
-  // User needs to confirm email
         return { success: true, needsConfirmation: true };
       }
-      
       this.setUser(result.user);
       return { success: true, needsConfirmation: false };
     } catch (error: any) {

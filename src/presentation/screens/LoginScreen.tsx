@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { ScrollView, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { observer } from 'mobx-react';
 import { useAuthStore } from '../hooks/useAuthStore';
 import { Button, Card } from '../components';
@@ -7,59 +7,26 @@ import { Button, Card } from '../components';
 const LoginScreen = observer(() => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [name, setName] = useState('');
-  
   const authStore = useAuthStore();
 
   const handleSubmit = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please fill in all fields');
+      Alert.alert('Error', 'Please enter email and password');
       return;
     }
-
     try {
-      if (isSignUp) {
-        const result = await authStore.signUp(email, password, name || undefined);
-        if (result.success) {
-          if (result.needsConfirmation) {
-            Alert.alert('Success', 'Please check your email to confirm your account');
-          } else {
-            Alert.alert('Success', 'Account created successfully!');
-          }
-        }
-      } else {
-        const result = await authStore.signIn(email, password);
-        if (result.success) {
-          Alert.alert('Success', 'Welcome back!');
-        }
+      const result = await authStore.signIn(email, password);
+      if (result.success) {
+        Alert.alert('Success', 'Welcome back!');
       }
     } catch (error) {
-  // Error is handled by authStore
+      // Error is handled by authStore
     }
-  };
-
-  const toggleMode = () => {
-    setIsSignUp(!isSignUp);
-    setEmail('');
-    setPassword('');
-    setName('');
-    authStore.setError(null);
   };
 
   return (
-    <View style={styles.container}>
-      <Card title={isSignUp ? 'Create Account' : 'Sign In'} style={styles.card}>
-        {isSignUp && (
-          <TextInput
-            style={styles.input}
-            placeholder="Name (optional)"
-            value={name}
-            onChangeText={setName}
-            autoCapitalize="words"
-          />
-        )}
-
+    <ScrollView contentContainerStyle={{ ...styles.container, flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+      <Card title="Sign In" style={styles.card}>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -69,42 +36,31 @@ const LoginScreen = observer(() => {
           autoCapitalize="none"
           autoComplete="email"
         />
-
         <TextInput
           style={styles.input}
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          autoComplete={isSignUp ? "new-password" : "current-password"}
+          autoComplete="current-password"
         />
-
         {authStore.error && (
           <Text style={styles.error}>{authStore.error}</Text>
         )}
-
         <Button
-          title={isSignUp ? 'Sign Up' : 'Sign In'}
+          title="Sign In"
           onPress={handleSubmit}
           loading={authStore.isLoading}
           disabled={authStore.isLoading}
           style={styles.submitButton}
         />
-
-        <Button
-          title={isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
-          onPress={toggleMode}
-          variant="outline"
-          style={styles.switchButton}
-        />
       </Card>
-    </View>
+    </ScrollView>
   );
 });
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#f5f5f5',
@@ -126,9 +82,6 @@ const styles = StyleSheet.create({
   submitButton: {
     marginTop: 10,
     marginBottom: 15,
-  },
-  switchButton: {
-    marginTop: 5,
   },
   error: {
     color: 'red',

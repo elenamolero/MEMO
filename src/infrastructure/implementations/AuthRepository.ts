@@ -5,25 +5,35 @@ import User from '../../domain/entities/User';
 export default class AuthRepository implements IAuthRepository {
   constructor(private readonly supabaseClient: ISupabaseClient) {}
 
-  async signUp(email: string, password: string, name?: string): Promise<{ user: User | null; needsConfirmation: boolean }> {
+  async signUp(signUpData: any): Promise<{ user: User | null; needsConfirmation: boolean }> {
     try {
+      // Prepare metadata for Supabase
+      const { email, password, name, surname, role, supervisor_role, birth_date, illness_initiation_date, illness_name, GDS_number, sex, gender, academic_level } = signUpData;
+      const metadata: any = {
+        name,
+        surname,
+        role,
+        supervisor_role,
+        birth_date,
+        illness_initiation_date,
+        illness_name,
+        GDS_number,
+        sex,
+        gender,
+        academic_level,
+      };
       const { data, error } = await this.supabaseClient.auth.signUp({
         email,
         password,
         options: {
-          data: {
-            full_name: name,
-          },
+          data: metadata,
         },
       });
-
       if (error) {
         throw error;
       }
-
-      const user = data.user ? this.mapSupabaseUserToEntity(data.user, name) : null;
+      const user = data.user ? this.mapSupabaseUserToEntity(data.user) : null;
       const needsConfirmation = !data.session;
-
       return { user, needsConfirmation };
     } catch (error) {
       console.error('Error signing up:', error);
@@ -71,14 +81,26 @@ export default class AuthRepository implements IAuthRepository {
     }
   }
 
-  private mapSupabaseUserToEntity(supabaseUser: any, name?: string): User {
+  private mapSupabaseUserToEntity(supabaseUser: any): User {
+    const meta = supabaseUser.user_metadata || {};
     return {
       id: supabaseUser.id,
       email: supabaseUser.email || '',
-      name: name || supabaseUser.user_metadata?.full_name || supabaseUser.email?.split('@')[0] || '',
-      avatarUrl: supabaseUser.user_metadata?.avatar_url || null,
+      name: meta.name || '',
+      surname: meta.surname || '',
+      password: '', // Never returned from Supabase, must be handled securely elsewhere
+      role: meta.role || '',
+      avatarUrl: meta.avatarUrl || null,
       createdAt: supabaseUser.created_at,
       updatedAt: supabaseUser.updated_at || supabaseUser.created_at,
+      supervisor_role: meta.supervisor_role ?? null,
+      birth_date: meta.birth_date ?? null,
+      illness_initiation_date: meta.illness_initiation_date ?? null,
+      illness_name: meta.illness_name ?? null,
+      GDS_number: meta.GDS_number ?? null,
+      sex: meta.sex ?? null,
+      gender: meta.gender ?? null,
+      academic_level: meta.academic_level ?? null,
     };
   }
 }
