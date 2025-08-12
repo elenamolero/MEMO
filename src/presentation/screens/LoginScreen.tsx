@@ -4,10 +4,15 @@ import { observer } from 'mobx-react';
 import { useAuthStore } from '../hooks/useAuthStore';
 import { Button, Card } from '../components';
 
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import type { RootStackParamList } from '../navigation/AppNavigator';
+
 const LoginScreen = observer(() => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const authStore = useAuthStore();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleSubmit = async () => {
     if (!email || !password) {
@@ -53,6 +58,11 @@ const LoginScreen = observer(() => {
           loading={authStore.isLoading}
           disabled={authStore.isLoading}
           style={styles.submitButton}
+        />
+        <Button
+          title="Create Account"
+          onPress={() => navigation.navigate('Register')}
+          variant="outline"
         />
       </Card>
     </ScrollView>

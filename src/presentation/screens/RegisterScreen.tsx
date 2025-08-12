@@ -9,20 +9,13 @@ const RegisterScreen = observer(() => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
-  const [role, setRole] = useState<'supervisor' | 'patient'>('patient');
+  const role = 'supervisor';
   const [supervisorRole, setSupervisorRole] = useState<'familiar' | 'neuropsychologist' | 'doctor' | null>(null);
-  const [birthDate, setBirthDate] = useState('');
-  const [illnessInitiationDate, setIllnessInitiationDate] = useState('');
-  const [illnessName, setIllnessName] = useState('');
-  const [GDSNumber, setGDSNumber] = useState('');
-  const [sex, setSex] = useState<'male' | 'female' | 'other' | null>(null);
-  const [gender, setGender] = useState<'male' | 'female' | 'other' | null>(null);
-  const [academicLevel, setAcademicLevel] = useState<'none' | 'primary' | 'secondary' | 'higher' | null>(null);
 
   const authStore = useAuthStore();
 
   const handleSubmit = async () => {
-    if (!email || !password || !name || !surname || !role) {
+    if (!email || !password || !name || !surname || !supervisorRole) {
       Alert.alert('Error', 'Please fill in all required fields');
       return;
     }
@@ -33,15 +26,9 @@ const RegisterScreen = observer(() => {
         name,
         surname,
         role,
-        supervisor_role: role === 'supervisor' ? supervisorRole : null,
-        birth_date: role === 'patient' ? birthDate : null,
-        illness_initiation_date: role === 'patient' ? illnessInitiationDate : null,
-        illness_name: role === 'patient' ? illnessName : null,
-        GDS_number: role === 'patient' && GDSNumber ? Number(GDSNumber) : null,
-        sex: role === 'patient' ? sex : null,
-        gender: role === 'patient' ? gender : null,
-        academic_level: role === 'patient' ? academicLevel : null,
+        supervisor_role: supervisorRole,
       };
+      console.log('RegisterScreen DTO:', dto);
       const result = await authStore.signUp(dto);
       if (result.success) {
         if (result.needsConfirmation) {
@@ -90,92 +77,17 @@ const RegisterScreen = observer(() => {
           autoComplete="new-password"
         />
         <View style={{ marginBottom: 10 }}>
-          <Text style={{ marginBottom: 5 }}>Role</Text>
+          <Text style={{ marginBottom: 5 }}>Supervisor Role</Text>
           <Button
-            title={role === 'supervisor' ? 'Supervisor' : 'Patient'}
-            onPress={() => setRole(role === 'supervisor' ? 'patient' : 'supervisor')}
+            title={supervisorRole || 'Select'}
+            onPress={() => {
+              const roles = ['familiar', 'neuropsychologist', 'doctor'];
+              const idx = roles.indexOf(supervisorRole || 'familiar');
+              setSupervisorRole(roles[(idx + 1) % roles.length] as any);
+            }}
             style={styles.input}
           />
         </View>
-        {role === 'supervisor' && (
-          <View style={{ marginBottom: 10 }}>
-            <Text style={{ marginBottom: 5 }}>Supervisor Role</Text>
-            <Button
-              title={supervisorRole || 'Select'}
-              onPress={() => {
-                const roles = ['familiar', 'neuropsychologist', 'doctor'];
-                const idx = roles.indexOf(supervisorRole || 'familiar');
-                setSupervisorRole(roles[(idx + 1) % roles.length] as any);
-              }}
-              style={styles.input}
-            />
-          </View>
-        )}
-        {role === 'patient' && (
-          <>
-            <TextInput
-              style={styles.input}
-              placeholder="Birth Date (YYYY-MM-DD)"
-              value={birthDate}
-              onChangeText={setBirthDate}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Illness Initiation Date (YYYY-MM-DD)"
-              value={illnessInitiationDate}
-              onChangeText={setIllnessInitiationDate}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Illness Name"
-              value={illnessName}
-              onChangeText={setIllnessName}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="GDS Number"
-              value={GDSNumber}
-              onChangeText={setGDSNumber}
-              keyboardType="numeric"
-            />
-            <View style={{ marginBottom: 10 }}>
-              <Text style={{ marginBottom: 5 }}>Sex</Text>
-              <Button
-                title={sex || 'Select'}
-                onPress={() => {
-                  const options = ['male', 'female', 'other'];
-                  const idx = options.indexOf(sex || 'male');
-                  setSex(options[(idx + 1) % options.length] as any);
-                }}
-                style={styles.input}
-              />
-            </View>
-            <View style={{ marginBottom: 10 }}>
-              <Text style={{ marginBottom: 5 }}>Gender</Text>
-              <Button
-                title={gender || 'Select'}
-                onPress={() => {
-                  const options = ['male', 'female', 'other'];
-                  const idx = options.indexOf(gender || 'male');
-                  setGender(options[(idx + 1) % options.length] as any);
-                }}
-                style={styles.input}
-              />
-            </View>
-            <View style={{ marginBottom: 10 }}>
-              <Text style={{ marginBottom: 5 }}>Academic Level</Text>
-              <Button
-                title={academicLevel || 'Select'}
-                onPress={() => {
-                  const options = ['none', 'primary', 'secondary', 'higher'];
-                  const idx = options.indexOf(academicLevel || 'none');
-                  setAcademicLevel(options[(idx + 1) % options.length] as any);
-                }}
-                style={styles.input}
-              />
-            </View>
-          </>
-        )}
         {authStore.error && (
           <Text style={styles.error}>{authStore.error}</Text>
         )}

@@ -3,10 +3,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { observer } from 'mobx-react';
 import { useAuthStore } from '../hooks/useAuthStore';
 import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
 
 export type RootStackParamList = {
   Login: undefined;
+  Register: undefined;
   Home: undefined;
 };
 
@@ -20,7 +22,10 @@ const AppNavigator = observer(() => {
       {authStore.isAuthenticated ? (
         <Stack.Screen name="Home" component={HomeScreen} />
       ) : (
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+        </>
       )}
     </Stack.Navigator>
   );

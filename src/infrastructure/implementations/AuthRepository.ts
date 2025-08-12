@@ -1,11 +1,12 @@
 import { IAuthRepository } from '../../domain/specifications/IAuthRepository';
 import ISupabaseClient from '../../domain/specifications/ISupabaseClient';
 import User from '../../domain/entities/User';
+import SignUpDTO from 'src/application/DTO/SignUpDTO';
 
 export default class AuthRepository implements IAuthRepository {
   constructor(private readonly supabaseClient: ISupabaseClient) {}
 
-  async signUp(signUpData: any): Promise<{ user: User | null; needsConfirmation: boolean }> {
+    async signUp(signUpData: SignUpDTO): Promise<{ user: User | null; needsConfirmation: boolean }> {
     try {
       // Prepare metadata for Supabase
       const { email, password, name, surname, role, supervisor_role, birth_date, illness_initiation_date, illness_name, GDS_number, sex, gender, academic_level } = signUpData;
@@ -22,6 +23,7 @@ export default class AuthRepository implements IAuthRepository {
         gender,
         academic_level,
       };
+      console.log('SignUp payload in infrastructure:', { email, password, name, surname, role, supervisor_role });
       const { data, error } = await this.supabaseClient.auth.signUp({
         email,
         password,
