@@ -5,8 +5,10 @@ import { useAuthStore } from '../hooks/useAuthStore';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
 
 export type RootStackParamList = {
+  Welcome: undefined;
   Login: undefined;
   Register: undefined;
   Home: undefined;
@@ -23,6 +25,7 @@ const AppNavigator = observer(() => {
         <Stack.Screen name="Home" component={HomeScreen} />
       ) : (
         <>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
         </>

@@ -6,7 +6,7 @@ import SignUpDTO from 'src/application/DTO/SignUpDTO';
 export default class AuthRepository implements IAuthRepository {
   constructor(private readonly supabaseClient: ISupabaseClient) {}
 
-    async signUp(signUpData: SignUpDTO): Promise<{ user: User | null; needsConfirmation: boolean }> {
+   async signUp(signUpData: SignUpDTO): Promise<{ user: User | null; needsConfirmation: boolean }> {
     try {
       // Prepare metadata for Supabase
       const { email, password, name, surname, role, supervisor_role, birth_date, illness_initiation_date, illness_name, GDS_number, sex, gender, academic_level } = signUpData;
@@ -33,6 +33,29 @@ export default class AuthRepository implements IAuthRepository {
       });
       if (error) {
         throw error;
+      }
+      // Insert into user table if user was created
+      if (data.user && data.user.id) {
+        const { error: dbError } = await this.supabaseClient
+          .from('user')
+          .insert([{
+            id: data.user.id,
+            name,
+            surname,
+            role,
+            supervisor_role,
+            birth_date,
+            illness_initiation_date,
+            illness_name,
+            GDS_number,
+            sex,
+            gender,
+            academic_level,
+          }]);
+        if (dbError) {
+          console.error('Error inserting into user table:', dbError);
+          throw dbError;
+        }
       }
       const user = data.user ? this.mapSupabaseUserToEntity(data.user) : null;
       const needsConfirmation = !data.session;
